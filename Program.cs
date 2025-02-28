@@ -3,28 +3,29 @@ using P01_2023EQ651_2022CI650.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Agregar la conexión a la base de datos
-builder.Services.AddDbContext<ParqueoDBContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-);
+// Add services to the container.
 
-// Agregar servicios de controladores
 builder.Services.AddControllers();
-
-// Configurar Swagger
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<ParqueoDBContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 var app = builder.Build();
 
-// Configurar middleware
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
